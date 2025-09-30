@@ -10,4 +10,9 @@ class CinemaController {
 
     @GetMapping("/health")
     fun health(): ResponseEntity<String> = ResponseEntity("", HttpStatus.OK)
+
+    @GetMapping("/seats")
+    fun seats(): ResponseEntity<SeatsAvailable> {
+        TODO("not implemented yet")
+    }
 }
