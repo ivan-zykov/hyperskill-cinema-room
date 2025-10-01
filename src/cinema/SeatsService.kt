@@ -12,10 +12,17 @@ class SeatsService {
     private val seats: MutableMap<Seat, IsTaken> = buildMap {
         (1..NUM_OF_ROWS).forEach { row ->
             (1..NUM_OF_COLUMNS).forEach { column ->
+                val price = if (row <= 4) {
+                    10
+                } else {
+                    8
+                }
+
                 put(
                     Seat(
                         row = row,
-                        column = column
+                        column = column,
+                        price = price,
                     ),
                     false
                 )
@@ -30,7 +37,7 @@ class SeatsService {
         return SeatsAvailable(
             totalRows = NUM_OF_ROWS,
             totalColumns = NUM_OF_COLUMNS,
-            availableSeats = seats
+            availableSeats = seats,
         )
     }
 }
