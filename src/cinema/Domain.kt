@@ -10,7 +10,7 @@ class SeatsAvailable(
     val totalColumns: Int,
 
     @JsonProperty("available_seats")
-    val availableSeats: List<Seat>,
+    val availableSeats: Set<Seat>,
 )
 
 data class Seat(

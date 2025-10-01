@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class CinemaController @Autowired constructor(val cinemaService: CinemaService) {
+class CinemaController @Autowired constructor(val seatsService: SeatsService) {
 
     @GetMapping("/health")
     fun health(): ResponseEntity<String> = ResponseEntity("", HttpStatus.OK)
 
     @GetMapping("/seats")
     fun seats(): ResponseEntity<SeatsAvailable> {
-        val seats = cinemaService.getSeats()
+        val seats = seatsService.getAllSeats()
 
         return ResponseEntity
             .ok()
