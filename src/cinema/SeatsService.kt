@@ -40,4 +40,8 @@ class SeatsService {
             availableSeats = seats,
         )
     }
+
+    fun purchaseSeat(row: Int, column: Int): Seat {
+        TODO("Not implemented yet")
+    }
 }
