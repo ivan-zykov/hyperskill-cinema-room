@@ -9,40 +9,33 @@ private const val NUM_OF_ROWS = NUM_OF_COLUMNS
 
 @Service
 class SeatsService {
-    private val seats: ConcurrentMap<SeatLocation, SeatAttributes> = ConcurrentHashMap()
+    private val seatsNew: ConcurrentMap<Int, Seat> = ConcurrentHashMap()
 
     init {
         (1..NUM_OF_ROWS).forEach { row ->
             (1..NUM_OF_COLUMNS).forEach { column ->
                 val price = if (row <= 4) 10 else 8
-                val location = SeatLocation(row, column)
-                val attributes = SeatAttributes(price, false)
-                seats.put(location, attributes)
-            }
-        }
-    }
-
-    fun getAllSeats(): SeatsAvailableDto {
-        val seats: Set<SeatDto> = buildSet {
-            seats.forEach { (location, attributes) ->
-                add(
-                    SeatDto(
-                        row = location.row,
-                        column = location.column,
-                        price = attributes.price
-                    )
+                val id = computeSeatId(row, column)
+                val seat = Seat(
+                    row = row,
+                    column = column,
+                    price = price,
+                    isTaken = false
                 )
+                seatsNew.put(id, seat)
             }
         }
-
-        return SeatsAvailableDto(
-            totalRows = NUM_OF_ROWS,
-            totalColumns = NUM_OF_COLUMNS,
-            availableSeats = seats,
-        )
     }
+
+    fun getAllSeats(): Set<Seat> = seatsNew.values.toSet()
+
+    fun getNumOfColumns(): Int = NUM_OF_COLUMNS
+
+    fun getNumOfRows(): Int = NUM_OF_ROWS
 
     fun purchaseSeat(row: Int, column: Int): SeatDto {
         TODO("Not implemented yet")
     }
+
+    private fun computeSeatId(row: Int, column: Int) = row * 10 + column
 }

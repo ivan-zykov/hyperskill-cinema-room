@@ -1,5 +1,6 @@
 package cinema
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -18,14 +19,19 @@ class CinemaController @Autowired constructor(val seatsService: SeatsService) {
 
     @GetMapping("/seats")
     fun seats(): ResponseEntity<SeatsAvailableDto> {
-//        todo: Isolate domain from DTOs. Make service return just domain data. Mapping to DTO should be here
-//        todo: Simplify domain. Make map's key the seat's id like 24, where 2 is row, 4 is column
-        val seats = seatsService.getAllSeats()
+        val seatsDto = seatsService.getAllSeats().toDto()
+        val numRows = seatsService.getNumOfRows()
+        val numCols = seatsService.getNumOfColumns()
+        val seatsAvailable = SeatsAvailableDto.create(
+            numRows = numRows,
+            numCols = numCols,
+            seatsDto = seatsDto
+        )
 
         return ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(seats)
+            .body(seatsAvailable)
     }
 
     @PostMapping("/purchase")
@@ -39,5 +45,51 @@ class CinemaController @Autowired constructor(val seatsService: SeatsService) {
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(purchasedSeat)
+    }
+}
+
+private fun Set<Seat>.toDto(): Set<SeatDto> = buildSet {
+    this@toDto.forEach { seat ->
+        add(
+            seat.toDto()
+        )
+    }
+}
+
+private fun Seat.toDto() = SeatDto(
+    row = row,
+    column = column,
+    price = price
+)
+
+
+@Suppress("unused")
+class SeatDto(
+    val row: Int,
+    val column: Int,
+    val price: Int,
+)
+
+@Suppress("unused")
+class SeatsAvailableDto(
+    @JsonProperty("total_rows")
+    val totalRows: Int,
+
+    @JsonProperty("total_columns")
+    val totalColumns: Int,
+
+    @JsonProperty("available_seats")
+    val availableSeats: Set<SeatDto>,
+) {
+    companion object {
+        fun create(
+            numRows: Int,
+            numCols: Int,
+            seatsDto: Set<SeatDto>
+        ): SeatsAvailableDto = SeatsAvailableDto(
+            totalRows = numRows,
+            totalColumns = numCols,
+            availableSeats = seatsDto
+        )
     }
 }
