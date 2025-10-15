@@ -1,47 +1,48 @@
 package cinema
 
 import org.springframework.stereotype.Service
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentMap
 
 private const val NUM_OF_COLUMNS = 9
 private const val NUM_OF_ROWS = NUM_OF_COLUMNS
 
-typealias IsTaken = Boolean
-
 @Service
 class SeatsService {
-    private val seats: MutableMap<Seat, IsTaken> = buildMap {
+    private val seats: ConcurrentMap<SeatLocation, SeatAttributes> = ConcurrentHashMap()
+
+    init {
         (1..NUM_OF_ROWS).forEach { row ->
             (1..NUM_OF_COLUMNS).forEach { column ->
-                val price = if (row <= 4) {
-                    10
-                } else {
-                    8
-                }
-
-                put(
-                    Seat(
-                        row = row,
-                        column = column,
-                        price = price,
-                    ),
-                    false
-                )
+                val price = if (row <= 4) 10 else 8
+                val location = SeatLocation(row, column)
+                val attributes = SeatAttributes(price, false)
+                seats.put(location, attributes)
             }
         }
     }
-        .toMutableMap()
 
-    fun getAllSeats(): SeatsAvailable {
-        val seats: Set<Seat> = seats.keys
+    fun getAllSeats(): SeatsAvailableDto {
+        val seats: Set<SeatDto> = buildSet {
+            seats.forEach { (location, attributes) ->
+                add(
+                    SeatDto(
+                        row = location.row,
+                        column = location.column,
+                        price = attributes.price
+                    )
+                )
+            }
+        }
 
-        return SeatsAvailable(
+        return SeatsAvailableDto(
             totalRows = NUM_OF_ROWS,
             totalColumns = NUM_OF_COLUMNS,
             availableSeats = seats,
         )
     }
 
-    fun purchaseSeat(row: Int, column: Int): Seat {
+    fun purchaseSeat(row: Int, column: Int): SeatDto {
         TODO("Not implemented yet")
     }
 }

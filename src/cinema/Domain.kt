@@ -2,7 +2,7 @@ package cinema
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-class SeatsAvailable(
+class SeatsAvailableDto(
     @JsonProperty("total_rows")
     val totalRows: Int,
 
@@ -10,29 +10,21 @@ class SeatsAvailable(
     val totalColumns: Int,
 
     @JsonProperty("available_seats")
-    val availableSeats: Set<Seat>,
+    val availableSeats: Set<SeatDto>,
 )
 
-data class Seat(
+class SeatDto(
     val row: Int,
     val column: Int,
     val price: Int,
-) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
+)
 
-        other as Seat
+class SeatAttributes(
+    val price: Int,
+    val isTaken: Boolean,
+)
 
-        if (row != other.row) return false
-        if (column != other.column) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = row
-        result = 31 * result + column
-        return result
-    }
-}
+data class SeatLocation(
+    val row: Int,
+    val column: Int,
+)
