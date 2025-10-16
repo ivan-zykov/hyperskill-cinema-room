@@ -9,7 +9,7 @@ private const val NUM_OF_ROWS = NUM_OF_COLUMNS
 
 @Service
 class SeatsService {
-    private val seatsNew: ConcurrentMap<Int, Seat> = ConcurrentHashMap()
+    private val seats: ConcurrentMap<Int, Seat> = ConcurrentHashMap()
 
     init {
         (1..NUM_OF_ROWS).forEach { row ->
@@ -22,19 +22,41 @@ class SeatsService {
                     price = price,
                     isTaken = false
                 )
-                seatsNew.put(id, seat)
+                seats.put(id, seat)
             }
         }
     }
 
-    fun getAllSeats(): Set<Seat> = seatsNew.values.toSet()
+    fun getAllSeats(): Set<Seat> = seats.values.toSet()
 
     fun getNumOfColumns(): Int = NUM_OF_COLUMNS
 
     fun getNumOfRows(): Int = NUM_OF_ROWS
 
-    fun purchaseSeat(row: Int, column: Int): SeatDto {
-        TODO("Not implemented yet")
+    fun purchaseSeatIn(
+        row: Int,
+        column: Int
+    ): Seat? {
+        val seat = getSeatIn(row = row, column = column)
+
+        return if (seat.isTaken) {
+            null
+        } else {
+            seat.reserve()
+            seat
+        }
+    }
+
+    private fun getSeatIn(
+        row: Int,
+        column: Int
+    ): Seat {
+        val id = computeSeatId(row = row, column = column)
+        val seat = seats[id]
+
+        check(seat != null) { "The number of a row or a column is out of bounds!" }
+
+        return seat
     }
 
     private fun computeSeatId(row: Int, column: Int) = row * 10 + column

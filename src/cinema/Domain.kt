@@ -4,7 +4,7 @@ data class Seat(
     val row: Int,
     val column: Int,
     val price: Int,
-    val isTaken: Boolean,
+    var isTaken: Boolean,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -22,5 +22,9 @@ data class Seat(
         var result = row
         result = 31 * result + column
         return result
+    }
+
+    fun reserve() {
+        isTaken = true
     }
 }

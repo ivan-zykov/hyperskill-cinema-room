@@ -39,12 +39,14 @@ class CinemaController @Autowired constructor(val seatsService: SeatsService) {
         @RequestParam row: Int,
         @RequestParam column: Int,
     ): ResponseEntity<SeatDto> {
-        val purchasedSeat = seatsService.purchaseSeat(row, column)
+        val purchasedSeat = seatsService.purchaseSeatIn(row, column)
+
+        check(purchasedSeat != null) { "The ticket has been already purchased!" }
 
         return ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(purchasedSeat)
+            .body(purchasedSeat.toDto())
     }
 }
 
