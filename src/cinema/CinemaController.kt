@@ -1,13 +1,12 @@
 package cinema
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @Suppress("unused")
@@ -36,10 +35,11 @@ class CinemaController @Autowired constructor(val seatsService: SeatsService) {
 
     @PostMapping("/purchase")
     fun purchaseSeat(
-        @RequestParam row: Int,
-        @RequestParam column: Int,
-    ): ResponseEntity<SeatDto> {
-        val purchasedSeat = seatsService.purchaseSeatIn(row, column)
+        @RequestBody selectedSeat: SeatInDto,
+    ): ResponseEntity<SeatOutDto> {
+        val (row, column) = selectedSeat
+
+        val purchasedSeat = seatsService.purchaseSeatIn(row = row, column = column)
 
         check(purchasedSeat != null) { "The ticket has been already purchased!" }
 
@@ -50,7 +50,7 @@ class CinemaController @Autowired constructor(val seatsService: SeatsService) {
     }
 }
 
-private fun Set<Seat>.toDto(): Set<SeatDto> = buildSet {
+private fun Set<Seat>.toDto(): Set<SeatOutDto> = buildSet {
     this@toDto.forEach { seat ->
         add(
             seat.toDto()
@@ -58,40 +58,8 @@ private fun Set<Seat>.toDto(): Set<SeatDto> = buildSet {
     }
 }
 
-private fun Seat.toDto() = SeatDto(
+private fun Seat.toDto() = SeatOutDto(
     row = row,
     column = column,
     price = price
 )
-
-
-@Suppress("unused")
-class SeatDto(
-    val row: Int,
-    val column: Int,
-    val price: Int,
-)
-
-@Suppress("unused")
-class SeatsAvailableDto(
-    @JsonProperty("total_rows")
-    val totalRows: Int,
-
-    @JsonProperty("total_columns")
-    val totalColumns: Int,
-
-    @JsonProperty("available_seats")
-    val availableSeats: Set<SeatDto>,
-) {
-    companion object {
-        fun create(
-            numRows: Int,
-            numCols: Int,
-            seatsDto: Set<SeatDto>
-        ): SeatsAvailableDto = SeatsAvailableDto(
-            totalRows = numRows,
-            totalColumns = numCols,
-            availableSeats = seatsDto
-        )
-    }
-}
