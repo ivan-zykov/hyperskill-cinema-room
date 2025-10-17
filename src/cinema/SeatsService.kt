@@ -54,7 +54,7 @@ class SeatsService {
         val id = computeSeatId(row = row, column = column)
         val seat = seats[id]
 
-        check(seat != null) { "The number of a row or a column is out of bounds!" }
+        checkNotNull(seat) { "The number of a row or a column is out of bounds!" }
 
         return seat
     }

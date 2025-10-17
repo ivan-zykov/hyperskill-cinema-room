@@ -28,7 +28,7 @@ class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
         headers: HttpHeaders,
         status: HttpStatusCode,
         request: WebRequest
-    ): ResponseEntity<in Any>? {
+    ): ResponseEntity<Any> {
         val body = makeErrorBodyFor(ex.message)
 
         return ResponseEntity(body, headers, HttpStatus.BAD_REQUEST)
@@ -46,6 +46,6 @@ class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
     }
 }
 
-private fun makeErrorBodyFor(message: String?) = mapOf(
+private fun makeErrorBodyFor(message: String?): ErrorBody = mapOf(
     "error" to (message ?: "")
 )

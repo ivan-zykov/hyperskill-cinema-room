@@ -34,14 +34,12 @@ class CinemaController @Autowired constructor(val seatsService: SeatsService) {
     }
 
     @PostMapping("/purchase")
-    fun purchaseSeat(
-        @RequestBody selectedSeat: SeatInDto,
-    ): ResponseEntity<SeatOutDto> {
+    fun purchaseSeat(@RequestBody selectedSeat: SeatInDto): ResponseEntity<SeatOutDto> {
         val (row, column) = selectedSeat
 
         val purchasedSeat = seatsService.purchaseSeatIn(row = row, column = column)
 
-        check(purchasedSeat != null) { "The ticket has been already purchased!" }
+        checkNotNull(purchasedSeat) { "The ticket has been already purchased!" }
 
         return ResponseEntity
             .ok()
