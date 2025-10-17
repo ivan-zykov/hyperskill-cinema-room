@@ -48,3 +48,9 @@ tasks.withType(KotlinCompile) {
 test {
     jvmArgs '--add-opens', 'java.base/java.lang=ALL-UNNAMED'
 }
+
+tasks.register('listGradlePlugins') {
+    project.plugins.each {
+        println it
+    }
+}
