@@ -40,7 +40,7 @@ class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
         status: HttpStatusCode,
         request: WebRequest
     ): ResponseEntity<Any> {
-        val body = makeErrorBodyFor("Request body is missing or invalid")
+        val body = makeErrorBodyFor(ex.message)
 
         return ResponseEntity(body, HttpStatus.BAD_REQUEST)
     }
