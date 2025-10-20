@@ -38,15 +38,14 @@ class SeatsService @Autowired constructor(tokenService: TokenService) {
     fun purchaseSeatIn(
         row: Int,
         column: Int
-    ): Seat? {
+    ): Seat {
         val seat = getSeatIn(row = row, column = column)
 
-        return if (seat.isTaken) {
-            null
-        } else {
-            seat.reserve()
-            seat
-        }
+        check(!seat.isTaken) { "The ticket has been already purchased!" }
+
+        seat.reserve()
+
+        return seat
     }
 
     private fun getSeatIn(

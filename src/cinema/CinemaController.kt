@@ -41,8 +41,7 @@ class CinemaController @Autowired constructor(
     fun purchaseSeat(@RequestBody selectedSeat: SeatInDto): ResponseEntity<OrderDto> {
         val (row, column) = selectedSeat
 
-        val purchasedSeat: Seat? = seatsService.purchaseSeatIn(row = row, column = column)
-        checkNotNull(purchasedSeat) { "The ticket has been already purchased!" }
+        val purchasedSeat: Seat = seatsService.purchaseSeatIn(row = row, column = column)
 
         val token: UUID = tokenService.generateToken()
 
