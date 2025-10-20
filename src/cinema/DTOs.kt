@@ -37,3 +37,8 @@ data class SeatInDto(
     val row: Int,
     val column: Int,
 )
+
+class OrderDto(
+    val token: String,
+    val ticket: SeatOutDto,
+)
