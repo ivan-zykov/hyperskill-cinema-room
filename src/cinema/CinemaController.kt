@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
-import java.util.*
 
 @Suppress("unused")
 @RestController
@@ -41,15 +40,31 @@ class CinemaController @Autowired constructor(
     fun purchaseSeat(@RequestBody selectedSeat: SeatInDto): ResponseEntity<OrderOutDto> {
         val (row, column) = selectedSeat
 
-        val purchasedIdToSeat: Pair<UUID, Seat> = seatsService.purchaseSeatIn(row = row, column = column)
+        val purchasedSeat: Seat = seatsService.purchaseSeatIn(row = row, column = column)
 
         return ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(
                 OrderOutDto(
-                    token = purchasedIdToSeat.first.toString(),
-                    ticket = purchasedIdToSeat.second.toDto()
+                    token = purchasedSeat.token.toString(),
+                    ticket = purchasedSeat.toDto()
+                )
+            )
+    }
+
+    @PostMapping("/return")
+    fun returnSeat(@RequestBody order: OrderInDTO): ResponseEntity<ReturnedOrderDto> {
+        val token: String = order.token
+
+        val returnedTicket: Seat = seatsService.returnSeatWith(token)
+
+        return ResponseEntity
+            .ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(
+                ReturnedOrderDto(
+                    returnedTicket = returnedTicket.toDto()
                 )
             )
     }

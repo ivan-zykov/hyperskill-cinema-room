@@ -44,6 +44,13 @@ class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
 
         return ResponseEntity(body, HttpStatus.BAD_REQUEST)
     }
+
+    @ExceptionHandler(InvalidTokenException::class)
+    fun handleInvalidToken(ex: InvalidTokenException): ResponseEntity<ErrorBody> {
+        val body = makeErrorBodyFor(ex.message)
+
+        return ResponseEntity<ErrorBody>(body, HttpStatus.BAD_REQUEST)
+    }
 }
 
 private fun makeErrorBodyFor(message: String?): ErrorBody = mapOf(

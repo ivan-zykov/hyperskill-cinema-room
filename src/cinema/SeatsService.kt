@@ -8,23 +8,25 @@ import java.util.concurrent.ConcurrentMap
 
 private const val NUM_OF_COLUMNS = 9
 private const val NUM_OF_ROWS = NUM_OF_COLUMNS
+private const val WRONG_ROW_COL_MESSAGE = "The number of a row or a column is out of bounds!"
+private const val TICKET_ALREADY_BOOKED_MESSAGE = "The ticket has been already purchased!"
+private const val WRONG_TOKEN_MESSAGE = "Wrong token!"
 
 @Service
-class SeatsService @Autowired constructor(tokenService: TokenService) {
-    private val seats: ConcurrentMap<UUID, Seat> = ConcurrentHashMap()
+class SeatsService @Autowired constructor(val tokenService: TokenService) {
+    private val seats: ConcurrentMap<Int, Seat> = ConcurrentHashMap()
 
     init {
         (1..NUM_OF_ROWS).forEach { row ->
             (1..NUM_OF_COLUMNS).forEach { column ->
-                val price = if (row <= 4) 10 else 8
-                val id: UUID = tokenService.generateToken()
+                val index: Int = computeSeatIndex(row, column)
+                val price: Int = if (row <= 4) 10 else 8
                 val seat = Seat(
                     row = row,
                     column = column,
                     price = price,
-                    isTaken = false
                 )
-                seats.put(id, seat)
+                seats.put(index, seat)
             }
         }
     }
@@ -38,27 +40,54 @@ class SeatsService @Autowired constructor(tokenService: TokenService) {
     fun purchaseSeatIn(
         row: Int,
         column: Int
-    ): Pair<UUID, Seat> {
-        val idToSeat: Pair<UUID, Seat> = getSeatIn(row = row, column = column)
+    ): Seat {
+        val seat: Seat = getSeatIn(row = row, column = column)
 
-        check(!idToSeat.second.isTaken) { "The ticket has been already purchased!" }
+        check(!seat.isTaken) { TICKET_ALREADY_BOOKED_MESSAGE }
 
-        idToSeat.second.reserve()
+        val token: UUID = tokenService.generateToken()
+        seat.reserveWith(token)
 
-        return idToSeat
+        return seat
+    }
+
+    fun returnSeatWith(token: String): Seat {
+        val tokenParsed: UUID = try {
+            UUID.fromString(token)
+        } catch (_: IllegalArgumentException) {
+            throw InvalidTokenException(WRONG_TOKEN_MESSAGE)
+        }
+
+        val seat: Seat = getSeatWith(tokenParsed)
+
+        seat.cancelReservation()
+
+        return seat
     }
 
     private fun getSeatIn(
         row: Int,
         column: Int
-    ): Pair<UUID, Seat> {
-        val idToSeat = seats.asSequence().filter { (_, seat) ->
-            seat.row == row && seat.column == column
-        }.map { (uuid, seat) -> uuid to seat }
-            .firstOrNull()
+    ): Seat {
+        val seatIndex = computeSeatIndex(row = row, column = column)
 
-        checkNotNull(idToSeat) { "The number of a row or a column is out of bounds!" }
+        val seat: Seat? = seats[seatIndex]
+        checkNotNull(seat) { WRONG_ROW_COL_MESSAGE }
 
-        return idToSeat
+        return seat
+    }
+
+    private fun getSeatWith(token: UUID): Seat {
+        val seat = seats.asSequence().filter { (_, seat) ->
+            seat.token == token
+        }.firstOrNull()?.value
+
+        checkNotNull(seat) { WRONG_TOKEN_MESSAGE }
+
+        return seat
     }
 }
+
+class InvalidTokenException(message: String) : RuntimeException(message)
+
+private fun computeSeatIndex(row: Int, column: Int) = row * 10 + column
