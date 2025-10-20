@@ -38,7 +38,17 @@ data class SeatInDto(
     val column: Int,
 )
 
-class OrderDto(
+@Suppress("unused")
+class OrderOutDto(
     val token: String,
     val ticket: SeatOutDto,
+)
+
+@Suppress("unused")
+class OrderInDTO(val token: String)
+
+@Suppress("unused")
+class ReturnedOrderDto(
+    @JsonProperty("returned_ticket")
+    val returnedTicket: SeatOutDto,
 )

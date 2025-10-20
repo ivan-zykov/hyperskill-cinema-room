@@ -38,26 +38,27 @@ class SeatsService @Autowired constructor(tokenService: TokenService) {
     fun purchaseSeatIn(
         row: Int,
         column: Int
-    ): Seat {
-        val seat = getSeatIn(row = row, column = column)
+    ): Pair<UUID, Seat> {
+        val idToSeat: Pair<UUID, Seat> = getSeatIn(row = row, column = column)
 
-        check(!seat.isTaken) { "The ticket has been already purchased!" }
+        check(!idToSeat.second.isTaken) { "The ticket has been already purchased!" }
 
-        seat.reserve()
+        idToSeat.second.reserve()
 
-        return seat
+        return idToSeat
     }
 
     private fun getSeatIn(
         row: Int,
         column: Int
-    ): Seat {
-        val seat: Seat? = seats.values.asSequence().filter { seat ->
+    ): Pair<UUID, Seat> {
+        val idToSeat = seats.asSequence().filter { (_, seat) ->
             seat.row == row && seat.column == column
-        }.firstOrNull()
+        }.map { (uuid, seat) -> uuid to seat }
+            .firstOrNull()
 
-        checkNotNull(seat) { "The number of a row or a column is out of bounds!" }
+        checkNotNull(idToSeat) { "The number of a row or a column is out of bounds!" }
 
-        return seat
+        return idToSeat
     }
 }

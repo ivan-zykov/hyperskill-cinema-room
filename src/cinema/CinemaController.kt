@@ -38,20 +38,18 @@ class CinemaController @Autowired constructor(
     }
 
     @PostMapping("/purchase")
-    fun purchaseSeat(@RequestBody selectedSeat: SeatInDto): ResponseEntity<OrderDto> {
+    fun purchaseSeat(@RequestBody selectedSeat: SeatInDto): ResponseEntity<OrderOutDto> {
         val (row, column) = selectedSeat
 
-        val purchasedSeat: Seat = seatsService.purchaseSeatIn(row = row, column = column)
-
-        val token: UUID = tokenService.generateToken()
+        val purchasedIdToSeat: Pair<UUID, Seat> = seatsService.purchaseSeatIn(row = row, column = column)
 
         return ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(
-                OrderDto(
-                    token = token.toString(),
-                    ticket = purchasedSeat.toDto()
+                OrderOutDto(
+                    token = purchasedIdToSeat.first.toString(),
+                    ticket = purchasedIdToSeat.second.toDto()
                 )
             )
     }
