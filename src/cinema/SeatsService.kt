@@ -86,6 +86,18 @@ class SeatsService @Autowired constructor(val tokenService: TokenService) {
 
         return seat
     }
+
+    fun getCurrentIncome(): Int {
+        TODO("Not yet implemented")
+    }
+
+    fun getNumberOfAvailableSeats(): Int {
+        TODO("Not yet implemented")
+    }
+
+    fun getNumberOfPurchasedTickets(): Int {
+        TODO("Not yet implemented")
+    }
 }
 
 class InvalidTokenException(message: String) : RuntimeException(message)

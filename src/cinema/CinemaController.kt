@@ -4,15 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @Suppress("unused")
 @RestController
-class CinemaController @Autowired constructor(val seatsService: SeatsService) {
-
+class CinemaController @Autowired constructor(
+    val seatsService: SeatsService,
+    val authService: AuthService,
+) {
     @GetMapping("/health")
     fun health(): ResponseEntity<String> = ResponseEntity("", HttpStatus.OK)
 
@@ -65,7 +64,33 @@ class CinemaController @Autowired constructor(val seatsService: SeatsService) {
                 )
             )
     }
+
+    @GetMapping("/stats")
+    fun getStats(@RequestParam password: String): ResponseEntity<StatsDto> {
+        val isValidUser = authService.authenticateFor(password)
+
+        if (!isValidUser) {
+            throw WrongPasswordException("The password is wrong!")
+        }
+
+        val currentIncome: Int = seatsService.getCurrentIncome()
+        val numberOfAvailableSeats: Int = seatsService.getNumberOfAvailableSeats()
+        val numberOfPurchasedTickets: Int = seatsService.getNumberOfPurchasedTickets()
+
+        return ResponseEntity
+            .ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(
+                StatsDto(
+                    currentIncome = currentIncome,
+                    numberOfAvailableSeats = numberOfAvailableSeats,
+                    numberOfPurchasedTickets = numberOfPurchasedTickets
+                )
+            )
+    }
 }
+
+class WrongPasswordException(message: String) : RuntimeException(message)
 
 private fun Set<Seat>.toDto(): Set<SeatOutDto> = buildSet {
     this@toDto.forEach { seat ->

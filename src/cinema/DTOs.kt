@@ -52,3 +52,13 @@ class ReturnedOrderDto(
     @JsonProperty("returned_ticket")
     val returnedTicket: SeatOutDto,
 )
+
+@Suppress("unused")
+class StatsDto(
+    @JsonProperty("current_income")
+    val currentIncome: Int,
+    @JsonProperty("number_of_available_seats")
+    val numberOfAvailableSeats: Int,
+    @JsonProperty("number_of_purchased_tickets")
+    val numberOfPurchasedTickets: Int,
+)

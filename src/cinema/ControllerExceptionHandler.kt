@@ -51,6 +51,13 @@ class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
 
         return ResponseEntity<ErrorBody>(body, HttpStatus.BAD_REQUEST)
     }
+
+    @ExceptionHandler(WrongPasswordException::class)
+    fun handleWrongPassword(ex: WrongPasswordException): ResponseEntity<ErrorBody> {
+        val body = makeErrorBodyFor(ex.message)
+
+        return ResponseEntity<ErrorBody>(body, HttpStatus.UNAUTHORIZED)
+    }
 }
 
 private fun makeErrorBodyFor(message: String?): ErrorBody = mapOf(
