@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @Suppress("unused")
 @RestController
-class CinemaController @Autowired constructor(
-    val seatsService: SeatsService,
-    val tokenService: TokenService
-) {
+class CinemaController @Autowired constructor(val seatsService: SeatsService) {
 
     @GetMapping("/health")
     fun health(): ResponseEntity<String> = ResponseEntity("", HttpStatus.OK)
