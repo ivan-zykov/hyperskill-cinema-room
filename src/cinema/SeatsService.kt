@@ -65,6 +65,12 @@ class SeatsService @Autowired constructor(val tokenService: TokenService) {
         return seat
     }
 
+    fun getStats(): Stats = Stats(
+        currentIncome = getCurrentIncome(),
+        numberOfAvailableSeats = getNumberOfAvailableSeats(),
+        numberOfPurchasedTickets = getNumberOfPurchasedTickets()
+    )
+
     private fun getSeatIn(
         row: Int,
         column: Int
@@ -87,12 +93,12 @@ class SeatsService @Autowired constructor(val tokenService: TokenService) {
         return seat
     }
 
-    fun getCurrentIncome(): Int = seats.values.filter { it.isTaken }
+    private fun getCurrentIncome(): Int = seats.values.filter { it.isTaken }
         .sumOf { it.price }
 
-    fun getNumberOfAvailableSeats(): Int = seats.values.count { !it.isTaken }
+    private fun getNumberOfAvailableSeats(): Int = seats.values.count { !it.isTaken }
 
-    fun getNumberOfPurchasedTickets(): Int = seats.values.count { it.isTaken }
+    private fun getNumberOfPurchasedTickets(): Int = seats.values.count { it.isTaken }
 }
 
 class InvalidTokenException(message: String) : RuntimeException(message)

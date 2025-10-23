@@ -6,6 +6,8 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
+private const val PASSWORD_IS_WRONG = "The password is wrong!"
+
 @Suppress("unused")
 @RestController
 class CinemaController @Autowired constructor(
@@ -70,23 +72,15 @@ class CinemaController @Autowired constructor(
         val isValidUser = authService.authenticateFor(password)
 
         if (!isValidUser) {
-            throw WrongPasswordException("The password is wrong!")
+            throw WrongPasswordException(PASSWORD_IS_WRONG)
         }
 
-        val currentIncome: Int = seatsService.getCurrentIncome()
-        val numberOfAvailableSeats: Int = seatsService.getNumberOfAvailableSeats()
-        val numberOfPurchasedTickets: Int = seatsService.getNumberOfPurchasedTickets()
+        val stats: Stats = seatsService.getStats()
 
         return ResponseEntity
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(
-                StatsDto(
-                    currentIncome = currentIncome,
-                    numberOfAvailableSeats = numberOfAvailableSeats,
-                    numberOfPurchasedTickets = numberOfPurchasedTickets
-                )
-            )
+            .body(stats.toDto())
     }
 }
 
@@ -104,4 +98,10 @@ private fun Seat.toDto() = SeatOutDto(
     row = row,
     column = column,
     price = price
+)
+
+private fun Stats.toDto(): StatsDto = StatsDto(
+    currentIncome = currentIncome,
+    numberOfAvailableSeats = numberOfAvailableSeats,
+    numberOfPurchasedTickets = numberOfPurchasedTickets
 )

@@ -13,6 +13,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 typealias ErrorBody = Map<String, String>
 
+private const val PASSWORD_IS_WRONG = "The password is wrong!"
+
 @Suppress("unused")
 @ControllerAdvice
 class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
@@ -29,9 +31,9 @@ class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
         status: HttpStatusCode,
         request: WebRequest
     ): ResponseEntity<Any> {
-        val body = makeErrorBodyFor(ex.message)
+        val body = makeErrorBodyFor(PASSWORD_IS_WRONG)
 
-        return ResponseEntity(body, headers, HttpStatus.BAD_REQUEST)
+        return ResponseEntity(body, headers, HttpStatus.UNAUTHORIZED)
     }
 
     override fun handleHttpMessageNotReadable(

@@ -9,7 +9,7 @@ class SeatsServiceTest {
     fun `income zero`() {
         val sut = createSut()
 
-        val result = sut.getCurrentIncome()
+        val result = sut.getStats().currentIncome
 
         assertEquals(0, result)
     }
@@ -20,7 +20,7 @@ class SeatsServiceTest {
         sut.purchaseSeatIn(1, 1)
         sut.purchaseSeatIn(5, 2)
 
-        val result = sut.getCurrentIncome()
+        val result = sut.getStats().currentIncome
 
         assertTrue(result > 0)
     }
@@ -31,7 +31,7 @@ class SeatsServiceTest {
         sut.purchaseSeatIn(1, 1)
         sut.purchaseSeatIn(1, 2)
 
-        val result = sut.getNumberOfAvailableSeats()
+        val result = sut.getStats().numberOfAvailableSeats
 
         val rows = sut.getNumOfRows()
         val cols = sut.getNumOfColumns()
@@ -50,7 +50,7 @@ class SeatsServiceTest {
             }
         }
 
-        val result = sut.getNumberOfAvailableSeats()
+        val result = sut.getStats().numberOfAvailableSeats
 
         assertEquals(0, result)
     }
@@ -61,7 +61,7 @@ class SeatsServiceTest {
         sut.purchaseSeatIn(1, 1)
         sut.purchaseSeatIn(1, 2)
 
-        val result = sut.getNumberOfPurchasedTickets()
+        val result = sut.getStats().numberOfPurchasedTickets
 
         assertEquals(2, result)
     }
@@ -70,7 +70,7 @@ class SeatsServiceTest {
     fun `purchased tickets number is zero`() {
         val sut = createSut()
 
-        val result = sut.getNumberOfPurchasedTickets()
+        val result = sut.getStats().numberOfPurchasedTickets
 
         assertEquals(0, result)
     }

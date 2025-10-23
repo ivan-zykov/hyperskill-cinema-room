@@ -19,3 +19,9 @@ class Seat(
         token = null
     }
 }
+
+class Stats(
+    val currentIncome: Int,
+    val numberOfAvailableSeats: Int,
+    val numberOfPurchasedTickets: Int,
+)
