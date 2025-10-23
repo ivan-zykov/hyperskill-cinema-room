@@ -36,7 +36,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
+    testImplementation(platform("org.junit:junit-bom:5.12.2"))     // Syncs JUnit 5 versions
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'junit:junit:4.13.2'                        // JUnit 4 API (for Hyperskill's integration tests)
+    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine'
+    // Run JUnit 4 on JUnit Platform. Version comes from the BOM
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // Helpful for Gradle/IDE runs. Version comes from the BOM
 }
 
 tasks.withType(KotlinCompile) {
