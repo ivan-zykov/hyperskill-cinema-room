@@ -1,4 +1,4 @@
-package net.ivanvzykov.cinema
+package net.ivanvzykov.cinema.businessandrepo
 
 import java.util.*
 

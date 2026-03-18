@@ -1,5 +1,6 @@
-package net.ivanvzykov.cinema
+package net.ivanvzykov.cinema.presentation
 
+import net.ivanvzykov.cinema.businessandrepo.InvalidTokenException
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
@@ -12,8 +13,6 @@ import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 
 typealias ErrorBody = Map<String, String>
-
-private const val PASSWORD_IS_WRONG = "The password is wrong!"
 
 @Suppress("unused")
 @ControllerAdvice

@@ -1,4 +1,4 @@
-package net.ivanvzykov.cinema
+package net.ivanvzykov.cinema.presentation
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

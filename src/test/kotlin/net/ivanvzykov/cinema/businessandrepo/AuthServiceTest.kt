@@ -1,4 +1,4 @@
-package net.ivanvzykov.cinema
+package net.ivanvzykov.cinema.businessandrepo
 
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue

@@ -1,12 +1,16 @@
-package net.ivanvzykov.cinema
+package net.ivanvzykov.cinema.presentation
 
+import net.ivanvzykov.cinema.businessandrepo.AuthService
+import net.ivanvzykov.cinema.businessandrepo.Seat
+import net.ivanvzykov.cinema.businessandrepo.SeatsService
+import net.ivanvzykov.cinema.businessandrepo.Stats
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
-private const val PASSWORD_IS_WRONG = "The password is wrong!"
+const val PASSWORD_IS_WRONG = "The password is wrong!"
 
 @Suppress("unused")
 @RestController
@@ -22,7 +26,7 @@ class CinemaController @Autowired constructor(
         val seatsDto = seatsService.getAllSeats().toDto()
         val numRows = seatsService.getNumOfRows()
         val numCols = seatsService.getNumOfColumns()
-        val seatsAvailable = SeatsAvailableDto.create(
+        val seatsAvailable = SeatsAvailableDto.Companion.create(
             numRows = numRows,
             numCols = numCols,
             seatsDto = seatsDto
@@ -100,8 +104,9 @@ private fun Seat.toDto() = SeatOutDto(
     price = price
 )
 
-private fun Stats.toDto(): StatsDto = StatsDto(
-    currentIncome = currentIncome,
-    numberOfAvailableSeats = numberOfAvailableSeats,
-    numberOfPurchasedTickets = numberOfPurchasedTickets
-)
+private fun Stats.toDto(): StatsDto =
+    StatsDto(
+        currentIncome = currentIncome,
+        numberOfAvailableSeats = numberOfAvailableSeats,
+        numberOfPurchasedTickets = numberOfPurchasedTickets
+    )

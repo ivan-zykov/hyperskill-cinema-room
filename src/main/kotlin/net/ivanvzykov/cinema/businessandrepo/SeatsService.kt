@@ -1,4 +1,4 @@
-package net.ivanvzykov.cinema
+package net.ivanvzykov.cinema.businessandrepo
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

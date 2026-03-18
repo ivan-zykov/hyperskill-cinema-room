@@ -1,7 +1,7 @@
-package net.ivanvzykov.cinema
+package net.ivanvzykov.cinema.businessandrepo
 
 import org.springframework.stereotype.Service
-import java.util.*
+import java.util.UUID
 
 @Service
 class TokenService {
