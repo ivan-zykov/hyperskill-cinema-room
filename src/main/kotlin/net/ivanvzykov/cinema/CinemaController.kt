@@ -1,4 +1,4 @@
-package cinema
+package net.ivanvzykov.cinema
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus

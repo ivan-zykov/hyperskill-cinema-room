@@ -1,10 +1,11 @@
-package cinema
+package net.ivanvzykov.cinema
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
+import kotlin.collections.get
 
 private const val NUM_OF_COLUMNS = 9
 private const val NUM_OF_ROWS = NUM_OF_COLUMNS

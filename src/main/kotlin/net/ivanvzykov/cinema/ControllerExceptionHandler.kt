@@ -1,4 +1,4 @@
-package cinema
+package net.ivanvzykov.cinema
 
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus

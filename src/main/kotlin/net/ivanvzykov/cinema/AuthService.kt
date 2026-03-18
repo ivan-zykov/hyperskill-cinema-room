@@ -1,4 +1,4 @@
-package cinema
+package net.ivanvzykov.cinema
 
 import org.springframework.stereotype.Service
 

@@ -1,4 +1,4 @@
-package cinema
+package net.ivanvzykov.cinema
 
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
