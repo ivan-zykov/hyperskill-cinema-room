@@ -1,7 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-def myCustomJavaVer = 23
-
 buildscript {
     def myCustomKotlinVer = "2.2.0"
 
@@ -48,7 +46,7 @@ dependencies {
 tasks.withType(KotlinCompile) {
     kotlinOptions {
         freeCompilerArgs = ['-Xjsr305=strict', '-Xannotation-default-target=param-property']
-        jvmTarget = "$myCustomJavaVer"
+        jvmTarget = String.valueOf(21)
     }
 }
 
