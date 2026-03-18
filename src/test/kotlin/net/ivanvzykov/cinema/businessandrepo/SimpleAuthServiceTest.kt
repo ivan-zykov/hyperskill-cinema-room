@@ -6,10 +6,10 @@ import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
-class AuthServiceTest {
+class SimpleAuthServiceTest {
     @Test
     fun `pass auth`() {
-        val sut = AuthService()
+        val sut = SimpleAuthService()
         val password = "super_secret"
 
         val result = sut.authenticateFor(password)
@@ -24,7 +24,7 @@ class AuthServiceTest {
         "1",
     ).map { pass ->
         dynamicTest("with password: $pass") {
-            val sut = AuthService()
+            val sut = SimpleAuthService()
 
             val result = sut.authenticateFor(pass)
 
