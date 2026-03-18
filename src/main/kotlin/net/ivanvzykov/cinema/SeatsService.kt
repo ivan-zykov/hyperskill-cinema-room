@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
-import kotlin.collections.get
 
 private const val NUM_OF_COLUMNS = 9
 private const val NUM_OF_ROWS = NUM_OF_COLUMNS
@@ -27,7 +26,7 @@ class SeatsService @Autowired constructor(val tokenService: TokenService) {
                     column = column,
                     price = price,
                 )
-                seats.put(index, seat)
+                seats[index] = seat
             }
         }
     }
@@ -85,9 +84,9 @@ class SeatsService @Autowired constructor(val tokenService: TokenService) {
     }
 
     private fun getSeatWith(token: UUID): Seat {
-        val seat = seats.asSequence().filter { (_, seat) ->
+        val seat = seats.asSequence().firstOrNull { (_, seat) ->
             seat.token == token
-        }.firstOrNull()?.value
+        }?.value
 
         checkNotNull(seat) { WRONG_TOKEN_MESSAGE }
 
