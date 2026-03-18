@@ -24,7 +24,7 @@ class CinemaController @Autowired constructor(
         val seatsDto = seatsService.getAllSeats().toDto()
         val numRows = seatsService.getNumOfRows()
         val numCols = seatsService.getNumOfColumns()
-        val seatsAvailable = SeatsAvailableDto.Companion.create(
+        val seatsAvailable = SeatsAvailableDto.create(
             numRows = numRows,
             numCols = numCols,
             seatsDto = seatsDto
