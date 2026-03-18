@@ -1,5 +1,6 @@
 package net.ivanvzykov.cinema.businessandrepo
 
+import net.ivanvzykov.cinema.presentation.InvalidTokenException
 import net.ivanvzykov.cinema.presentation.SeatsService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -101,7 +102,5 @@ class InMemSeatsService @Autowired constructor(val tokenService: TokenService) :
 
     private fun getNumberOfPurchasedTickets(): Int = seats.values.count { it.isTaken }
 }
-
-class InvalidTokenException(message: String) : RuntimeException(message)
 
 private fun computeSeatIndex(row: Int, column: Int) = row * 10 + column
