@@ -2,7 +2,6 @@ package net.ivanvzykov.cinema.presentation
 
 import net.ivanvzykov.cinema.businessandrepo.AuthService
 import net.ivanvzykov.cinema.businessandrepo.Seat
-import net.ivanvzykov.cinema.businessandrepo.SeatsService
 import net.ivanvzykov.cinema.businessandrepo.Stats
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus

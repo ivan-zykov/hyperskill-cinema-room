@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
-class SeatsServiceTest {
+class InMemSeatsServiceTest {
     @Test
     fun `income zero`() {
         val sut = createSut()
@@ -76,4 +76,4 @@ class SeatsServiceTest {
     }
 }
 
-private fun createSut(): SeatsService = SeatsService(TokenService())
+private fun createSut(): InMemSeatsService = InMemSeatsService(TokenService())

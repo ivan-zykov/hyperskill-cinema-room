@@ -1,5 +1,6 @@
 package net.ivanvzykov.cinema.businessandrepo
 
+import net.ivanvzykov.cinema.presentation.SeatsService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.*
@@ -13,7 +14,7 @@ private const val TICKET_ALREADY_BOOKED_MESSAGE = "The ticket has been already p
 private const val WRONG_TOKEN_MESSAGE = "Wrong token!"
 
 @Service
-class SeatsService @Autowired constructor(val tokenService: TokenService) {
+class InMemSeatsService @Autowired constructor(val tokenService: TokenService) : SeatsService {
     private val seats: ConcurrentMap<Int, Seat> = ConcurrentHashMap()
 
     init {
@@ -31,13 +32,13 @@ class SeatsService @Autowired constructor(val tokenService: TokenService) {
         }
     }
 
-    fun getAllSeats(): Set<Seat> = seats.values.toSet()
+    override fun getAllSeats(): Set<Seat> = seats.values.toSet()
 
-    fun getNumOfColumns(): Int = NUM_OF_COLUMNS
+    override fun getNumOfColumns(): Int = NUM_OF_COLUMNS
 
-    fun getNumOfRows(): Int = NUM_OF_ROWS
+    override fun getNumOfRows(): Int = NUM_OF_ROWS
 
-    fun purchaseSeatIn(
+    override fun purchaseSeatIn(
         row: Int,
         column: Int
     ): Seat {
@@ -51,7 +52,7 @@ class SeatsService @Autowired constructor(val tokenService: TokenService) {
         return seat
     }
 
-    fun returnSeatWith(token: String): Seat {
+    override fun returnSeatWith(token: String): Seat {
         val tokenParsed: UUID = try {
             UUID.fromString(token)
         } catch (_: IllegalArgumentException) {
@@ -65,7 +66,7 @@ class SeatsService @Autowired constructor(val tokenService: TokenService) {
         return seat
     }
 
-    fun getStats(): Stats = Stats(
+    override fun getStats(): Stats = Stats(
         currentIncome = getCurrentIncome(),
         numberOfAvailableSeats = getNumberOfAvailableSeats(),
         numberOfPurchasedTickets = getNumberOfPurchasedTickets()
