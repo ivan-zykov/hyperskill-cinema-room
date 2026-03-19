@@ -1,15 +1,28 @@
 # Cinema Room REST Service (Kotlin + Spring Boot)
 
-REST API for basic bookkeeping of a cinema.  
-Supports listing all seats, booking and returning a seat, showing statistics secured by simple password  
+This project demonstrates a RESTful backend built with Kotlin and Spring Boot, focusing on maintainable architecture and testability.  
+Provides REST endpoints for:
+- listing all seats
+- booking a seat
+- returning a seat
+- showing statistics secured by simple password  
 
-## Stack
+## Tech Stack
 
-Kotlin · Spring Boot · Gradle
+- Kotlin
+- Spring Boot
+- Gradle
 
 ## Architecture
 
-Partially layered design (Controller → Service + Repository). For simplicity service handles in-memory data
+Partially layered design (Controller → Service + Repository). The service layer manages in-memory data to keep the implementation focused on API design and validation.
+
+## Features
+
+- RESTful API design
+- Centralized exception handling
+- DTOs are used to separate API contracts from internal models
+- Partially covered with unit tests
 
 ## Requirements
 
@@ -33,7 +46,16 @@ gradlew.bat bootRun
 
 http://localhost:28852
 
-## Notes
+## API Overview
 
-- Tests of the controller are missing
-- Tests of the service don't cover the functionality of listing, purchasing and returning tickets
+- GET /health — service health check
+- GET /seats — retrieve all seats
+- POST /purchase — book a seat
+- POST /return — cancel seat reservation
+- GET /stats — retrieve statistics (password protected)
+
+## Future improvements
+
+- Extend test coverage (controller and edge cases)
+- Add authentication for protected endpoints
+- Replace in-memory storage with persistent database
