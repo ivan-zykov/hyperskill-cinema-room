@@ -57,5 +57,5 @@ http://localhost:28852
 ## Future improvements
 
 - Extend test coverage (controller and edge cases)
-- Add authentication for protected endpoints
+- Extend authentication for endpoints
 - Replace in-memory storage with persistent database
