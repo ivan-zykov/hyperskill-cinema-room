@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
-import org.springframework.web.bind.MissingServletRequestParameterException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.WebRequest
@@ -21,17 +20,6 @@ class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
         val body = makeErrorBodyFor(ex.message)
 
         return ResponseEntity<ErrorBody>(body, HttpStatus.BAD_REQUEST)
-    }
-
-    override fun handleMissingServletRequestParameter(
-        ex: MissingServletRequestParameterException,
-        headers: HttpHeaders,
-        status: HttpStatusCode,
-        request: WebRequest
-    ): ResponseEntity<Any> {
-        val body = makeErrorBodyFor(PASSWORD_IS_WRONG)
-
-        return ResponseEntity(body, headers, HttpStatus.UNAUTHORIZED)
     }
 
     override fun handleHttpMessageNotReadable(

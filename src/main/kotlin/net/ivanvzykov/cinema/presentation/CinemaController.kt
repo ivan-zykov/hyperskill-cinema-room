@@ -8,14 +8,9 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
-const val PASSWORD_IS_WRONG = "The password is wrong!"
-
 @Suppress("unused")
 @RestController
-class CinemaController @Autowired constructor(
-    val seatsService: SeatsService,
-    val authService: AuthService,
-) {
+class CinemaController @Autowired constructor(val seatsService: SeatsService) {
     @GetMapping("/health")
     fun health(): ResponseEntity<String> = ResponseEntity("", HttpStatus.OK)
 
@@ -70,13 +65,7 @@ class CinemaController @Autowired constructor(
     }
 
     @GetMapping("/stats")
-    fun getStats(@RequestParam password: String): ResponseEntity<StatsDto> {
-        val isValidUser = authService.authenticateFor(password)
-
-        if (!isValidUser) {
-            throw WrongPasswordException(PASSWORD_IS_WRONG)
-        }
-
+    fun getStats(): ResponseEntity<StatsDto> {
         val stats: Stats = seatsService.getStats()
 
         return ResponseEntity
