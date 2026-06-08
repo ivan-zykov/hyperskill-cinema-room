@@ -12,7 +12,7 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 
-@WebMvcTest
+@WebMvcTest(CinemaController::class)
 @Import(SecurityConfig::class) // Required for Spring Auth to work correctly
 class CinemaControllerTest(@Autowired val mockMvc: MockMvc) {
 
